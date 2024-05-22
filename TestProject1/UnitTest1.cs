@@ -55,12 +55,33 @@ namespace TestProject1
             string numbers = "1,\n";
             Assert.Throws<Exception>(() => _stringCalculator.Add(numbers));
         }
-        [Fact]  
+        [Fact]
         public void Should_Sum_Separator_When_New_Separator()
         {
             string numbers = "//;\n1;2";
             int result = _stringCalculator.Add(numbers);
             Assert.Equal(3, result);
         }
-    }   
+        [Fact]
+        public void Should_Return_Exception_If_Input_Numbers_Are_Megative()
+        {
+            string numbers = "1,-5,7,3,-8,-12";
+            Exception error = Assert.Throws<Exception>(() => _stringCalculator.Add(numbers));
+            Assert.Equal("negatives not allowed: -5, -8, -12", error.Message);
+        }
+        [Fact]
+        public void Should_Avoid_Numbers_Greater_Than_1000()
+        {
+            string numbers = "//;\n1;2;249947";
+            int result = _stringCalculator.Add(numbers);
+            Assert.Equal(3, result);
+        }
+        /*public void Should_Handle_Multiple_Separator_Lenght() 
+        [Fact]
+        {
+            string numbers = "//[***]\n1***2***3";
+            int result = _stringCalculator.Add(numbers);
+            Assert.Equal(6, result);
+         */
+    }
 }

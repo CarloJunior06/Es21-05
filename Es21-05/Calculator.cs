@@ -6,33 +6,42 @@ using System.Threading.Tasks;
 
 namespace Es21_05
 {
-    public class Calculator 
+    public class Calculator
     {
-        public int Add(string numbers)
+        public string[] CustomSplit(string input)
         {
-            int sum = 0;          
-            if (numbers.Length == 0)
+            List<char> delimiters = [',', '\n'];
+            if (input.StartsWith("//"))
             {
-                return sum;
-            }
-            List<char> delimiters = [ ',', '\n' ];
-            if (numbers.StartsWith("//"))
-            {
-                char newdelimiter = numbers[2];
+                char newdelimiter = input[2];
                 delimiters.Add(newdelimiter);
-                numbers = numbers.Substring(4); //remove 
-            };
-            string[] numbersString = numbers.Split(delimiters.ToArray());      
-            try
-            {   
+                input = input.Substring(4);
 
-                sum = numbersString.Sum(n => int.Parse(n));
-                return sum;
             }
-            catch 
-            {
-                throw new Exception("Invalid Input");
-            }
+            return input.Split(delimiters.ToArray());
         }
+            public int Add(string numbers)
+            {
+                int sum = 0;
+                if (numbers.Length == 0)
+                {
+                    return sum;
+                }
+                string[] numbersString = CustomSplit(numbers);
+                var negatives = numbersString.Where(n => n.Contains('-'));
+                if (negatives.Count() != 0)
+                    throw new Exception($"negatives not allowed: {negatives.Aggregate((c, n) => $"{c}, {n}")}");
+
+                try
+                {
+
+                    sum = numbersString.Select(int.Parse).Where(n => n <= 1000).Sum();
+                    return sum;
+                }
+                catch
+                {
+                    throw new Exception("Invalid Input");
+                }
+            }
     }
-}
+} 
