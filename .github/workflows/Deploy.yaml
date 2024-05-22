@@ -17,4 +17,4 @@ jobs:
       - name: Solution Compilation
         run: dotnet build
       - name: Test Compilation
-        run: dotnet test <TestProject1>
+        run: dotnet test <Es21-05>
